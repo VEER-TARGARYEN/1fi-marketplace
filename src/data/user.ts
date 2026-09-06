@@ -14,8 +14,3 @@ export const MOCK_USER_LIMIT: UserLimit = {
   ltv: 0.5, // 50% loan-to-value
   currency: 'INR',
 };
-
-export const MOCK_USER = {
-  name: 'Aarav',
-  city: 'Lucknow',
-};

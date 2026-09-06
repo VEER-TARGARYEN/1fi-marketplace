@@ -33,6 +33,11 @@ function ProductCardBase({ product, onPress, style }: ProductCardProps) {
   const monthly = lowestMonthlyEmi(product.basePrice);
   const off = discountPercent(product.mrp, product.basePrice);
   const badge = primaryBadge(product);
+  // Some product names already lead with the brand ("Sony WH-1000XM6") — avoid
+  // "Sony Sony …" in the accessibility label.
+  const fullName = product.name.toLowerCase().startsWith(product.brand.toLowerCase())
+    ? product.name
+    : `${product.brand} ${product.name}`;
 
   // The wishlist button is a SIBLING overlay (not nested inside the card's
   // Pressable) so we never render an invalid button-inside-button on web.
@@ -41,7 +46,7 @@ function ProductCardBase({ product, onPress, style }: ProductCardProps) {
       <PressableScale
         onPress={() => onPress(product)}
         accessibilityRole="button"
-        accessibilityLabel={`${product.brand} ${product.name}, from ${formatCurrency(monthly)} per month`}
+        accessibilityLabel={`${fullName}, from ${formatCurrency(monthly)} per month`}
       >
         <Card padded={false} shadow="sm" style={styles.card}>
           <View style={styles.imageWrap}>

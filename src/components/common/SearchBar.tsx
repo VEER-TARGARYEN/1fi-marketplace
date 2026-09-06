@@ -34,7 +34,7 @@ export function SearchBar({
         clearButtonMode="while-editing"
       />
       {value.length > 0 && (
-        <Pressable onPress={() => onChangeText('')} hitSlop={hitSlop} accessibilityLabel="Clear search">
+        <Pressable onPress={() => onChangeText('')} hitSlop={hitSlop} accessibilityRole="button" accessibilityLabel="Clear search">
           <Ionicons name="close-circle" size={18} color={palette.textTertiary} />
         </Pressable>
       )}

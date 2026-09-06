@@ -3,7 +3,7 @@ import React from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
-import { Button, Card, Divider, ScreenHeader, Text } from '@/components/common';
+import { Button, Card, Divider, ErrorState, ScreenHeader, Skeleton, Text } from '@/components/common';
 import { ProductImage } from '@/components/marketplace';
 import { usePlaceOrder } from '@/hooks/usePlaceOrder';
 import { useProduct } from '@/hooks/useProducts';
@@ -74,9 +74,20 @@ export function CheckoutScreen({ route, navigation }: RootScreenProps<'Checkout'
     return (
       <View style={styles.screen}>
         <ScreenHeader title="Checkout" onBack={() => navigation.goBack()} />
-        <View style={styles.loading}>
-          <ActivityIndicator color={palette.primary} />
-        </View>
+        {productQuery.isError ? (
+          <View style={styles.loading}>
+            <ErrorState
+              title="Couldn’t load checkout"
+              message={productQuery.error?.message}
+              onRetry={() => productQuery.refetch()}
+              retrying={productQuery.isFetching}
+            />
+          </View>
+        ) : (
+          <View style={styles.loading}>
+            <ActivityIndicator color={palette.primary} />
+          </View>
+        )}
       </View>
     );
   }
@@ -155,20 +166,35 @@ export function CheckoutScreen({ route, navigation }: RootScreenProps<'Checkout'
           Backed by your mutual funds
         </Text>
         <Card style={styles.card}>
-          <View style={styles.lienRow}>
-            <View style={styles.lienIcon}>
-              <Ionicons name="lock-closed" size={18} color={palette.primary} />
-            </View>
-            <Text variant="bodySm" color="textSecondary" style={styles.lienText}>
-              We’ll lien-mark {formatCurrency(lienAmount)} of your mutual funds. Your units stay
-              invested and continue to grow.
+          {limit ? (
+            <>
+              <View style={styles.lienRow}>
+                <View style={styles.lienIcon}>
+                  <Ionicons name="lock-closed" size={18} color={palette.primary} />
+                </View>
+                <Text variant="bodySm" color="textSecondary" style={styles.lienText}>
+                  We’ll lien-mark {formatCurrency(lienAmount)} of your mutual funds. Your units stay
+                  invested and continue to grow.
+                </Text>
+              </View>
+              <Divider />
+              <Row label="Available 1Fi limit" value={formatCurrency(limit.availableLimit)} />
+              <Row label="This purchase" value={`− ${formatCurrency(unitPrice)}`} />
+              <Divider />
+              <Row label="Limit after purchase" value={formatCurrency(availableAfter)} strong />
+            </>
+          ) : limitQuery.isError ? (
+            <Text variant="bodySm" color="textSecondary">
+              Your units stay invested — limit details are unavailable right now.
             </Text>
-          </View>
-          <Divider />
-          <Row label="Available 1Fi limit" value={formatCurrency(limit?.availableLimit ?? 0)} />
-          <Row label="This purchase" value={`− ${formatCurrency(unitPrice)}`} />
-          <Divider />
-          <Row label="Limit after purchase" value={formatCurrency(availableAfter)} strong />
+          ) : (
+            <>
+              <Skeleton width="100%" height={38} radius={radii.md} />
+              <Divider />
+              <Skeleton width="100%" height={16} style={styles.skeletonGap} />
+              <Skeleton width="70%" height={16} />
+            </>
+          )}
         </Card>
 
         {placeOrder.isError && (
@@ -203,6 +229,7 @@ const styles = StyleSheet.create({
   loading: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   content: { padding: spacing.xl, paddingBottom: 150 },
   card: { marginBottom: spacing.lg },
+  skeletonGap: { marginTop: spacing.md, marginBottom: spacing.sm },
   productRow: { flexDirection: 'row' },
   thumb: { width: 84, height: 84, borderRadius: radii.md },
   productInfo: { flex: 1, marginLeft: spacing.lg },

@@ -101,6 +101,8 @@ export function MarketplaceTab({ activeKey, onChangeTab, topInset }: Marketplace
       onCategory={setCategory}
       limit={limitQuery.data}
       limitLoading={limitQuery.isLoading}
+      limitError={limitQuery.isError}
+      onRetryLimit={() => limitQuery.refetch()}
       onOpenLimit={() => navigation.navigate('Limit')}
       count={products.length}
       showCount={!showSkeletons && !productsQuery.isError}
@@ -141,7 +143,11 @@ export function MarketplaceTab({ activeKey, onChangeTab, topInset }: Marketplace
         refreshControl={
           <RefreshControl
             refreshing={productsQuery.isRefetching}
-            onRefresh={() => productsQuery.refetch()}
+            onRefresh={() => {
+              productsQuery.refetch();
+              limitQuery.refetch();
+              categoriesQuery.refetch();
+            }}
             tintColor={palette.primary}
             colors={[palette.primary]}
           />
@@ -169,6 +175,8 @@ interface MarketplaceHeaderProps {
   onCategory: (id: CategoryId | 'all') => void;
   limit?: import('@/types').UserLimit;
   limitLoading: boolean;
+  limitError: boolean;
+  onRetryLimit: () => void;
   onOpenLimit: () => void;
   count: number;
   showCount: boolean;
@@ -191,6 +199,8 @@ function MarketplaceHeader({
   onCategory,
   limit,
   limitLoading,
+  limitError,
+  onRetryLimit,
   onOpenLimit,
   count,
   showCount,
@@ -212,7 +222,13 @@ function MarketplaceHeader({
       )}
 
       <View style={styles.gutter}>
-        <LimitStrip limit={limit} loading={limitLoading} onPress={onOpenLimit} />
+        <LimitStrip
+          limit={limit}
+          loading={limitLoading}
+          error={limitError}
+          onRetry={onRetryLimit}
+          onPress={onOpenLimit}
+        />
 
         <View style={styles.sectionRow}>
           <SectionHeader

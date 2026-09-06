@@ -31,12 +31,12 @@ export function SortSheet({ visible, value, onSelect, onClose }: SortSheetProps)
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose} accessibilityLabel="Close sort menu">
+      <Pressable style={styles.backdrop} onPress={onClose} accessibilityRole="button" accessibilityLabel="Close sort menu">
         <Pressable style={[styles.sheet, { paddingBottom: insets.bottom + spacing.md }]}>
           <View style={styles.handle} />
           <View style={styles.headerRow}>
             <Text variant="h3">Sort by</Text>
-            <Pressable onPress={onClose} hitSlop={hitSlop} accessibilityLabel="Close">
+            <Pressable onPress={onClose} hitSlop={hitSlop} accessibilityRole="button" accessibilityLabel="Close">
               <Ionicons name="close" size={22} color={palette.textSecondary} />
             </Pressable>
           </View>

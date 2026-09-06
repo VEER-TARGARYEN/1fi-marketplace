@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useRef } from 'react';
-import { Animated, StyleSheet, View } from 'react-native';
+import { Animated, ScrollView, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import { Button, Card, Divider, Text } from '@/components/common';
@@ -35,7 +35,10 @@ export function OrderSuccessScreen({ route, navigation }: RootScreenProps<'Order
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
       <StatusBar style="dark" />
-      <View style={styles.body}>
+      <ScrollView
+        contentContainerStyle={styles.body}
+        showsVerticalScrollIndicator={false}
+      >
         <Animated.View style={[styles.check, { transform: [{ scale }] }]}>
           <Ionicons name="checkmark" size={44} color={palette.white} />
         </Animated.View>
@@ -67,7 +70,7 @@ export function OrderSuccessScreen({ route, navigation }: RootScreenProps<'Order
             <Line label="MF lien-marked" value={formatCurrency(order.lienAmount)} />
           </Card>
         </Animated.View>
-      </View>
+      </ScrollView>
 
       <View style={styles.actions}>
         <Button
@@ -90,7 +93,7 @@ export function OrderSuccessScreen({ route, navigation }: RootScreenProps<'Order
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: palette.background },
-  body: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl },
+  body: { flexGrow: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl },
   check: {
     width: 92,
     height: 92,

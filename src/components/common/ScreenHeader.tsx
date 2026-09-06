@@ -18,7 +18,7 @@ export function ScreenHeader({ title, onBack, right }: ScreenHeaderProps) {
     <View style={[styles.container, { paddingTop: insets.top + spacing.sm }]}>
       <View style={styles.row}>
         {onBack ? (
-          <Pressable onPress={onBack} hitSlop={hitSlop} style={styles.iconBtn} accessibilityLabel="Go back">
+          <Pressable onPress={onBack} hitSlop={hitSlop} style={styles.iconBtn} accessibilityRole="button" accessibilityLabel="Go back">
             <Ionicons name="arrow-back" size={22} color={palette.text} />
           </Pressable>
         ) : (

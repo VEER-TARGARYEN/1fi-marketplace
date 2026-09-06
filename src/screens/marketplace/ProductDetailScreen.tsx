@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   Pressable,
   ScrollView,
@@ -56,13 +56,18 @@ export function ProductDetailScreen({ route, navigation }: RootScreenProps<'Prod
   const plans = product ? buildEmiPlans(price, tenures, limitQuery.data) : [];
 
   const [selectedTenure, setSelectedTenure] = useState<number | null>(null);
+  // Until the user explicitly picks a plan, keep the selection synced to the
+  // recommended tenure — which can change as the price (variant) changes.
+  const userPickedTenure = useRef(false);
+  const selectTenure = useCallback((tenure: number) => {
+    userPickedTenure.current = true;
+    setSelectedTenure(tenure);
+  }, []);
   useEffect(() => {
-    if (!plans.length) return;
+    if (!plans.length || userPickedTenure.current) return;
     const recommended = plans.find((p) => p.recommended) ?? plans[0];
-    setSelectedTenure((current) =>
-      current && plans.some((p) => p.tenureMonths === current) ? current : recommended.tenureMonths,
-    );
-  }, [plans.length]); // eslint-disable-line react-hooks/exhaustive-deps
+    setSelectedTenure(recommended.tenureMonths);
+  }, [price, plans.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectedPlan = plans.find((p) => p.tenureMonths === selectedTenure) ?? null;
   const canProceed = !!selectedPlan && selectedPlan.withinLimit;
@@ -104,7 +109,7 @@ export function ProductDetailScreen({ route, navigation }: RootScreenProps<'Prod
     tint?: string;
     label: string;
   }) => (
-    <Pressable onPress={onPress} hitSlop={hitSlop} style={styles.floatBtn} accessibilityLabel={label}>
+    <Pressable onPress={onPress} hitSlop={hitSlop} style={styles.floatBtn} accessibilityRole="button" accessibilityLabel={label}>
       <Ionicons name={icon} size={20} color={tint ?? palette.text} />
     </Pressable>
   );
@@ -198,7 +203,13 @@ export function ProductDetailScreen({ route, navigation }: RootScreenProps<'Prod
           )}
 
           <View style={styles.priceBlock}>
-            <PriceTag price={price} mrp={product.mrp + (price - product.basePrice)} size="lg" />
+            {/* Scale MRP proportionally so the discount % stays consistent with
+                the card across variant changes. */}
+            <PriceTag
+              price={price}
+              mrp={Math.round(product.mrp * (price / product.basePrice))}
+              size="lg"
+            />
             <View style={styles.emiHint}>
               <Ionicons name="pricetag" size={13} color={palette.primary} />
               <Text variant="label" color="primary" style={styles.emiHintText}>
@@ -242,7 +253,7 @@ export function ProductDetailScreen({ route, navigation }: RootScreenProps<'Prod
           <EmiPlanSelector
             plans={plans}
             selectedTenure={selectedTenure}
-            onSelect={setSelectedTenure}
+            onSelect={selectTenure}
           />
 
           {/* Why 1Fi */}

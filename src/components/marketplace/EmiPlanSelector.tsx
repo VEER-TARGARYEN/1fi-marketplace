@@ -44,7 +44,7 @@ export function EmiPlanSelector({ plans, selectedTenure, onSelect }: EmiPlanSele
                 <Text variant="title">{formatCurrency(plan.monthlyAmount)}</Text>
                 <Text variant="bodySm" color="textSecondary">
                   {' '}
-                  /mo × {plan.tenureMonths} mo
+                  /mo for {plan.tenureMonths} months
                 </Text>
               </View>
               {disabled ? (

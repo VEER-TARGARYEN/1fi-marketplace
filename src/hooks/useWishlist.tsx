@@ -5,6 +5,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -25,33 +26,38 @@ const WishlistContext = createContext<WishlistContextValue | undefined>(undefine
  */
 export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const [ids, setIds] = useState<string[]>([]);
+  // If the user toggles before async hydration resolves, we must not let the
+  // slower hydrate clobber their change (last-writer-wins data loss).
+  const dirtyRef = useRef(false);
 
   // Hydrate once on mount.
   useEffect(() => {
     let active = true;
     AsyncStorage.getItem(STORAGE_KEY)
       .then((raw) => {
-        if (active && raw) setIds(JSON.parse(raw));
+        if (!active || dirtyRef.current || !raw) return;
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          setIds(parsed.filter((x): x is string => typeof x === 'string'));
+        }
       })
       .catch(() => {
-        /* ignore corrupt storage */
+        /* ignore missing/corrupt storage */
       });
     return () => {
       active = false;
     };
   }, []);
 
-  const persist = useCallback((next: string[]) => {
-    setIds(next);
-    AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+  // Functional update so concurrent toggles compose, and one write per change.
+  const toggle = useCallback((id: string) => {
+    dirtyRef.current = true;
+    setIds((prev) => {
+      const next = prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id];
+      AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(next)).catch(() => {});
+      return next;
+    });
   }, []);
-
-  const toggle = useCallback(
-    (id: string) => {
-      persist(ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]);
-    },
-    [ids, persist],
-  );
 
   const value = useMemo<WishlistContextValue>(
     () => ({

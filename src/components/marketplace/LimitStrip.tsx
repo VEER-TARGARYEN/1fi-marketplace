@@ -13,6 +13,8 @@ import { formatCompactCurrency, formatCurrency } from '@/utils/format';
 interface LimitStripProps {
   limit?: UserLimit;
   loading?: boolean;
+  error?: boolean;
+  onRetry?: () => void;
   onPress?: () => void;
 }
 
@@ -23,14 +25,37 @@ const TRUST = ['0% interest', 'No credit check', 'Prepay anytime'];
  * marketplace with this makes the core 1Fi value prop explicit: you're shopping
  * against your investments, not a credit card.
  */
-export function LimitStrip({ limit, loading, onPress }: LimitStripProps) {
-  if (loading || !limit) {
+export function LimitStrip({ limit, loading, error, onRetry, onPress }: LimitStripProps) {
+  if (loading) {
     return (
       <Card style={styles.card}>
         <Skeleton width={120} height={12} />
         <Skeleton width={180} height={26} style={{ marginTop: spacing.sm }} />
         <Skeleton width="100%" height={8} radius={radii.pill} style={{ marginTop: spacing.lg }} />
       </Card>
+    );
+  }
+
+  // Failed to load (or no data) — offer a compact retry instead of an endless
+  // shimmer, consistent with the app's other error states.
+  if (error || !limit) {
+    return (
+      <PressableScale onPress={onRetry} activeScale={0.98} accessibilityRole="button">
+        <Card style={styles.card}>
+          <View style={styles.errorRow}>
+            <Ionicons name="wallet-outline" size={18} color={palette.textSecondary} />
+            <Text variant="bodySm" color="textSecondary" style={styles.errorText}>
+              Couldn’t load your 1Fi limit
+            </Text>
+            <View style={styles.retry}>
+              <Ionicons name="refresh" size={14} color={palette.primary} />
+              <Text variant="label" color="primary" style={styles.retryText}>
+                Retry
+              </Text>
+            </View>
+          </View>
+        </Card>
+      </PressableScale>
     );
   }
 
@@ -96,6 +121,10 @@ export function LimitStrip({ limit, loading, onPress }: LimitStripProps) {
 
 const styles = StyleSheet.create({
   card: { overflow: 'hidden' },
+  errorRow: { flexDirection: 'row', alignItems: 'center' },
+  errorText: { flex: 1, marginLeft: spacing.sm },
+  retry: { flexDirection: 'row', alignItems: 'center' },
+  retryText: { marginLeft: 4 },
   inner: { padding: spacing.lg },
   headerRow: { flexDirection: 'row', alignItems: 'center' },
   iconCircle: {

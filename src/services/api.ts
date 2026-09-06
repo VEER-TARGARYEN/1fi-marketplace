@@ -99,18 +99,16 @@ export async function fetchProductById(id: string): Promise<Product> {
   return product;
 }
 
-/** A few high-signal products for the "Featured" rail on the marketplace home. */
-export async function fetchFeaturedProducts(): Promise<Product[]> {
-  await wait();
-  maybeFail('load featured products');
-  return PRODUCTS.filter((p) => p.featured);
-}
-
 // ─────────────────────────── User limit ───────────────────────────
+// A mutable copy so a placed order actually moves the available headroom —
+// making the mutation → invalidation → UI-update loop observable, as it would
+// be against a real backend.
+let userLimit: UserLimit = { ...MOCK_USER_LIMIT };
+
 export async function fetchUserLimit(): Promise<UserLimit> {
   await wait();
   maybeFail('load your 1Fi limit');
-  return MOCK_USER_LIMIT;
+  return { ...userLimit };
 }
 
 // ─────────────────────────── Orders ───────────────────────────
@@ -118,6 +116,13 @@ export async function placeOrder(request: OrderRequest): Promise<Order> {
   // Orders take a touch longer — mimic lien-marking + lender approval.
   await new Promise((resolve) => setTimeout(resolve, 1100));
   maybeFail('place your order');
+
+  // Reflect the purchase against the mutual-fund-backed limit.
+  userLimit = {
+    ...userLimit,
+    availableLimit: Math.max(0, userLimit.availableLimit - request.unitPrice),
+    usedLimit: userLimit.usedLimit + request.unitPrice,
+  };
 
   const id = `1FI${Math.floor(100000 + Math.random() * 900000)}`;
   return {
@@ -129,7 +134,7 @@ export async function placeOrder(request: OrderRequest): Promise<Order> {
     tenureMonths: request.tenureMonths,
     monthlyAmount: request.monthlyAmount,
     firstEmiDate: firstEmiDate(new Date()),
-    lienAmount: Math.round(request.unitPrice / MOCK_USER_LIMIT.ltv),
+    lienAmount: Math.round(request.unitPrice / userLimit.ltv),
   };
 }
 
