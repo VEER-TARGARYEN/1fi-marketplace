@@ -16,10 +16,10 @@ interface ProductImageProps {
 }
 
 /**
- * Product visual: a soft accent-tinted panel hosting either a real product
- * image (when a URL is provided) or the branded DeviceGraphic fallback. If a
- * remote image fails to load, it gracefully falls back to the vector graphic —
- * the app never shows a broken image.
+ * Product visual: a soft accent-tinted panel showing a real product photo when
+ * one is provided, over the branded DeviceGraphic. The graphic acts as the
+ * placeholder while the photo loads and as the fallback if it fails — so the
+ * app always shows something and never a broken image, online or offline.
  */
 export function ProductImage({
   accentColor,
@@ -30,7 +30,10 @@ export function ProductImage({
   style,
 }: ProductImageProps) {
   const [failed, setFailed] = useState(false);
-  const hasRemote = !!images && images.length > 0 && !failed;
+  const [loaded, setLoaded] = useState(false);
+
+  const uri = images && images.length > 0 ? images[0] : null;
+  const showImage = !!uri && !failed;
 
   return (
     <View style={[styles.panel, style]}>
@@ -41,16 +44,23 @@ export function ProductImage({
         style={StyleSheet.absoluteFill}
       />
       <View style={[styles.inner, { padding }]}>
-        {hasRemote ? (
+        {/* Branded graphic: placeholder while the photo loads, fallback on error. */}
+        {(!showImage || !loaded) && (
+          <DeviceGraphic type={deviceType} color={accentColor} idKey={idKey} />
+        )}
+        {showImage && (
           <Image
-            source={{ uri: images![0] }}
+            source={{ uri }}
             resizeMode="contain"
+            onLoad={() => setLoaded(true)}
             onError={() => setFailed(true)}
-            style={styles.image}
+            style={[
+              styles.image,
+              { top: padding, left: padding, right: padding, bottom: padding },
+              { opacity: loaded ? 1 : 0 },
+            ]}
             accessibilityIgnoresInvertColors
           />
-        ) : (
-          <DeviceGraphic type={deviceType} color={accentColor} idKey={idKey} />
         )}
       </View>
     </View>
@@ -59,6 +69,6 @@ export function ProductImage({
 
 const styles = StyleSheet.create({
   panel: { overflow: 'hidden', backgroundColor: '#FFFFFF' },
-  inner: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  image: { width: '100%', height: '100%' },
+  inner: { flex: 1, alignItems: 'center', justifyContent: 'center', position: 'relative' },
+  image: { position: 'absolute', width: undefined, height: undefined },
 });

@@ -17,6 +17,7 @@ export const PRODUCTS: Product[] = [
   // ───────────────────────── Smartphones ─────────────────────────
   {
     id: 'iphone-16-pro',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/IPhone_16_Pro_Vector.svg/960px-IPhone_16_Pro_Vector.svg.png'],
     name: 'iPhone 16 Pro',
     brand: 'Apple',
     category: 'smartphones',
@@ -68,6 +69,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'galaxy-s25-ultra',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Samsung_Galaxy_S25_Ultra_Titanium_Silverblue.jpg/960px-Samsung_Galaxy_S25_Ultra_Titanium_Silverblue.jpg'],
     name: 'Galaxy S25 Ultra',
     brand: 'Samsung',
     category: 'smartphones',
@@ -117,6 +119,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'oneplus-13',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/OnePlus_13_back.jpg/960px-OnePlus_13_back.jpg'],
     name: 'OnePlus 13',
     brand: 'OnePlus',
     category: 'smartphones',
@@ -212,6 +215,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'nothing-phone-3',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Nothing_phone.jpg/960px-Nothing_phone.jpg'],
     name: 'Nothing Phone (3)',
     brand: 'Nothing',
     category: 'smartphones',
@@ -260,6 +264,7 @@ export const PRODUCTS: Product[] = [
   // ───────────────────────── Laptops ─────────────────────────
   {
     id: 'macbook-air-15-m4',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Macbook_Air_15_inch_-_2_%28blurred%29.jpg/960px-Macbook_Air_15_inch_-_2_%28blurred%29.jpg'],
     name: 'MacBook Air 15" M4',
     brand: 'Apple',
     category: 'laptops',
@@ -320,6 +325,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'dell-xps-14',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/DELL_XPS_13_and_15_%2837080596413%29.jpg/960px-DELL_XPS_13_and_15_%2837080596413%29.jpg'],
     name: 'Dell XPS 14',
     brand: 'Dell',
     category: 'laptops',
@@ -405,6 +411,7 @@ export const PRODUCTS: Product[] = [
   // ───────────────────────── Audio ─────────────────────────
   {
     id: 'sony-wh1000xm6',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Sony-WH-1000XM3-kabellose-Bluetooth-Noise-Cancelling-Kopfhoerer.jpg/960px-Sony-WH-1000XM3-kabellose-Bluetooth-Noise-Cancelling-Kopfhoerer.jpg'],
     name: 'Sony WH-1000XM6',
     brand: 'Sony',
     category: 'audio',
@@ -444,6 +451,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'airpods-pro-3',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/b/b9/AirPods_Pro_3_with_case.jpg'],
     name: 'AirPods Pro 3',
     brand: 'Apple',
     category: 'audio',
@@ -471,6 +479,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'galaxy-buds3-pro',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Samsung_Galaxy_buds.jpg/960px-Samsung_Galaxy_buds.jpg'],
     name: 'Galaxy Buds3 Pro',
     brand: 'Samsung',
     category: 'audio',
@@ -510,6 +519,7 @@ export const PRODUCTS: Product[] = [
   // ───────────────────────── Wearables ─────────────────────────
   {
     id: 'apple-watch-s10',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Apple_Watch_Series_10.jpg/960px-Apple_Watch_Series_10.jpg'],
     name: 'Apple Watch Series 10',
     brand: 'Apple',
     category: 'wearables',
@@ -558,6 +568,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'galaxy-watch7',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Samsung_Galaxy_Watch.jpg/960px-Samsung_Galaxy_Watch.jpg'],
     name: 'Galaxy Watch7',
     brand: 'Samsung',
     category: 'wearables',
@@ -606,6 +617,7 @@ export const PRODUCTS: Product[] = [
   // ───────────────────────── Tablets ─────────────────────────
   {
     id: 'ipad-pro-13-m4',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Wikipedia_on_iPad_Pro.jpg/960px-Wikipedia_on_iPad_Pro.jpg'],
     name: 'iPad Pro 13" M4',
     brand: 'Apple',
     category: 'tablets',
@@ -695,6 +707,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'samsung-neo-qled-55',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Samsung_QLED_TV_8K_-_75_inches_-_2018-11-02.jpg/960px-Samsung_QLED_TV_8K_-_75_inches_-_2018-11-02.jpg'],
     name: 'Neo QLED 4K 55"',
     brand: 'Samsung',
     category: 'tvs',
@@ -734,6 +747,7 @@ export const PRODUCTS: Product[] = [
   // ───────────────────────── Gaming ─────────────────────────
   {
     id: 'ps5-pro',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Black_and_white_Playstation_5_base_edition_with_controller.png/960px-Black_and_white_Playstation_5_base_edition_with_controller.png'],
     name: 'PlayStation 5 Pro',
     brand: 'Sony',
     category: 'gaming',
@@ -762,6 +776,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'xbox-series-x',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Xbox_Series_X_S_color.svg/960px-Xbox_Series_X_S_color.svg.png'],
     name: 'Xbox Series X',
     brand: 'Microsoft',
     category: 'gaming',
@@ -791,6 +806,7 @@ export const PRODUCTS: Product[] = [
   // ───────────────────────── Cameras ─────────────────────────
   {
     id: 'sony-a7-iv',
+    images: ['https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Sony_A7_IV_%28ILCE-7M4%29_-_by_Henry_S%C3%B6derlund_%2851739988735%29.jpg/960px-Sony_A7_IV_%28ILCE-7M4%29_-_by_Henry_S%C3%B6derlund_%2851739988735%29.jpg'],
     name: 'Sony Alpha A7 IV',
     brand: 'Sony',
     category: 'cameras',

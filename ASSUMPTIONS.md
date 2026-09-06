@@ -64,13 +64,18 @@ ratings and specs, to demonstrate a complete browsing experience.
   actually works (lien-marking rather than selling units).
 - These figures are illustrative, not financial advice.
 
-## 6. Product imagery — brand-tinted vector graphics
+## 6. Product imagery — real photos with a vector fallback
 
-Rather than depend on remote product photos (which break offline, 404, or add
-external dependencies), each product renders a **brand-tinted vector
-`DeviceGraphic`**. This keeps the app fully self-contained and visually cohesive.
-The data model still has an `images` field: provide a URL and `ProductImage`
-uses it, gracefully falling back to the vector graphic if it fails to load.
+Products carry real product images sourced from **Wikimedia Commons** (freely
+licensed) via each product's `images` URL. `ProductImage` shows the photo over a
+**brand-tinted vector `DeviceGraphic`**, which doubles as the loading placeholder
+and the fallback if a URL ever fails — so the app never shows a broken image and
+still works offline. A few products with no clean Commons photo (e.g. Pixel 9
+Pro, ROG Zephyrus, LG OLED C4) intentionally keep the vector graphic.
+
+Image URLs point at `upload.wikimedia.org`; swap them for a first-party product
+CDN in production. Attribution for the Commons photos remains with their
+respective authors under their CC/public-domain licenses.
 
 ## 7. Networking / connectivity
 

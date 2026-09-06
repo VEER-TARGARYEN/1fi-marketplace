@@ -228,6 +228,7 @@ src/
 
 ---
 
-<sub>Built with care for the 1Fi SDE Intern assignment. Product imagery uses
-brand-tinted vector graphics so the app is fully self-contained and offline
-capable; real image URLs drop into `product.images` and take over automatically.</sub>
+<sub>Built with care for the 1Fi SDE Intern assignment. Products show real
+photos (Wikimedia Commons, freely licensed) over a brand-tinted vector graphic
+that serves as the loading placeholder and offline/error fallback — so the app
+never shows a broken image.</sub>
